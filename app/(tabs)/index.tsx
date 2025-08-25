@@ -29,7 +29,7 @@ export default function HomeScreen() {
           style={styles.playButton}
           onPress={() => router.push("/(tabs)/levels")}
         >
-          <Text style={styles.playText}>▶︎ PLAY</Text>
+          <Text style={styles.playText}>▶︎ PLAY </Text>
         </TouchableOpacity>
 
         {/* Acciones secundarias (opcionales)
