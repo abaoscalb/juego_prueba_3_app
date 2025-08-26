@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Sound } from "../../lib/sound";
 
 const DATA_URL =
   "https://gist.githubusercontent.com/Oscar-skr/407c4db8d978c1817abfaf9f3f37b709/raw/quiz.json";
@@ -101,23 +102,24 @@ export default function LevelsScreen() {
           return (
             <View style={styles.levelWrapper}>
               <View style={styles.levelShadow} />
-              <TouchableOpacity
-                style={styles.levelBtn}
-                activeOpacity={0.9}
-                onPress={() =>
-                  router.push({
-                    pathname: "/(tabs)/quiz",
-                    params: { levelId: item.id ?? `lvl${index + 1}` },
-                  })
-                }
-              >
-                <Text style={styles.levelText}>
-                  {item.title || `NIVEL ${index + 1}`}
-                </Text>
-                {!!count && (
-                  <Text style={styles.levelSub}>{count} preguntas</Text>
-                )}
-              </TouchableOpacity>
+<TouchableOpacity
+  style={styles.levelBtn}
+  activeOpacity={0.9}
+  onPress={() => {
+    Sound.play("tap"); // 👈 fire-and-forget, SIN await
+    router.push({
+      pathname: "/quiz",
+      params: { levelId: item.id ?? `lvl${index + 1}` },
+    });
+  }}
+>
+  <Text style={styles.levelText}>
+    {item.title || `NIVEL ${index + 1}`}
+  </Text>
+  {!!count && <Text style={styles.levelSub}>{count} preguntas</Text>}
+</TouchableOpacity>
+
+
             </View>
           );
         }}
@@ -131,7 +133,7 @@ export default function LevelsScreen() {
       <View style={styles.container}>
         {/* robot video arriba a la derecha */}
         <Video
-          source={require("../assets/images/robot.mp4")}
+          source={require("../../assets/images/robot.mp4")}
           style={styles.robot}
           resizeMode={ResizeMode.CONTAIN}
           isLooping
@@ -159,13 +161,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 14,
   },
-  robot: {
-    position: "absolute",
-    top: 0,
-    right: 8,
-    width: 110,
-    height: 110,
-  },
+robot: {
+  width: 110,
+  height: 110,
+  alignSelf: "flex-end", // si lo querés arriba a la derecha
+  marginTop: 4,
+},
   listContent: { paddingBottom: 28, paddingTop: 12, gap: 18 },
   levelWrapper: { position: "relative" },
   levelShadow: {
